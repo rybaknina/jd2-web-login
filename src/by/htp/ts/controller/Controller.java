@@ -14,7 +14,7 @@ import java.io.IOException;
 public class Controller extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String COMMAND_NAME = "command";
-    public static ConnectionPool pool;
+    private static ConnectionPool pool;
     private final CommandProvider provider = new CommandProvider();
 
     public Controller() {
