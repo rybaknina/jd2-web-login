@@ -2,7 +2,6 @@ package by.htp.ts.command.impl;
 
 import by.htp.ts.been.User;
 import by.htp.ts.command.Command;
-import by.htp.ts.dao.SqlUserDAO;
 import by.htp.ts.service.UserService;
 import by.htp.ts.service.UserServiceImpl;
 import com.mysql.jdbc.StringUtils;

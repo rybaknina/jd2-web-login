@@ -151,6 +151,24 @@ public final class ConnectionPool {
 			e.getStackTrace();
 		}
 	}
+	public void closeConnection (Connection con, PreparedStatement ps, ResultSet rs){
+		try{
+			con.close();
+		}
+		catch(SQLException e){
+			e.getMessage();
+		}
+		try{
+			ps.close();
+		}catch(SQLException e){
+			e.getStackTrace();
+		}
+		try {
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	private void closeConnectionQueue(BlockingQueue<Connection> queue) throws SQLException{
 		Connection connection;
 		while((connection=queue.poll()) !=null){
