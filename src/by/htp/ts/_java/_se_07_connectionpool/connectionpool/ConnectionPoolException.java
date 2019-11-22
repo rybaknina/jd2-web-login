@@ -1,4 +1,4 @@
-package _java._se._07_connectionpool.ConnectionPool;
+package by.htp.ts._java._se_07_connectionpool.connectionpool;
 
 public class ConnectionPoolException extends Exception{
 	

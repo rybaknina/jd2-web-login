@@ -1,7 +1,7 @@
-package _java._se._07_connectionpool.ConnectionPool;
+package by.htp.ts._java._se_07_connectionpool.connectionpool;
 
-import _java._se._07_connectionpool.DBResourceManager;
-import _java._se._07_connectionpool.DBParameter;
+import by.htp.ts._java._se_07_connectionpool.connectionpool.dbparameters.DBParameter;
+import by.htp.ts._java._se_07_connectionpool.connectionpool.dbparameters.DBResourceManager;
 
 import java.sql.Statement;
 import java.sql.Array;
@@ -40,65 +40,50 @@ public final class ConnectionPool {
 	private String user;
 	private String password;
 	private int poolSize;
-	private static ConnectionPool pool;
-	static {
+    private static ConnectionPool pool;
+    public static ConnectionPool getConnectionPool(){
+        if(pool==null){
+            return new ConnectionPool();
+        }
+        return pool;
+    }
+    private ConnectionPool() {
+        DBResourceManager dbResourceManager = DBResourceManager.getInstance();
+        this.driverName = dbResourceManager.getValue(DBParameter.DB_DRIVER);
+        this.url = dbResourceManager.getValue(DBParameter.DB_URL);
+        this.user = dbResourceManager.getValue(DBParameter.DB_USER);
+        this.password = dbResourceManager.getValue(DBParameter.DB_PASSWORD);
 
-		try {
-			pool = new ConnectionPool();
-			pool.initPoolData();
-		} catch (SQLException e){
-            LOGGER.log(Level.SEVERE, "SQLException occur", e);
-			//log
-			try {
-				throw new ConnectionPoolRuntimeException("error", e);
-			} catch (ConnectionPoolRuntimeException ec) {
-				// log
-                LOGGER.log(Level.SEVERE, "ConnectionPoolRuntimeException occur", ec);
-			}
+        try {
+            this.poolSize = Integer.parseInt(dbResourceManager.getValue(DBParameter.DB_POLL_SIZE));
+        } catch (NumberFormatException e) {
+            poolSize = 5;
+        }
 
-		} catch (ClassNotFoundException e){
-            LOGGER.log(Level.SEVERE, "ClassNotFoundException occur", e);
-		//log
-			try {
-				throw new ConnectionPoolRuntimeException("error", e);
-			} catch (ConnectionPoolRuntimeException ec) {
-				// log
-                LOGGER.log(Level.SEVERE, "ConnectionPoolRuntimeException occur", ec);
-			}
-		}
+    }
 
-	}
+    public void initPoolData() throws ConnectionPoolException {
+        try{
+            Class.forName(driverName);
+            givenAwayConQueue = new ArrayBlockingQueue<Connection>(poolSize);
+            connectionQueue = new ArrayBlockingQueue<Connection>(poolSize);
 
-	public static ConnectionPool getInstance(){
-		if(pool==null){
-			return new ConnectionPool(); 
-		}
-		return pool;
-	}
-	private ConnectionPool(){
-		DBResourceManager dbResourseManager = DBResourceManager.getInstance();
-		this.driverName = dbResourseManager.getValue(DBParameter.DB_DRIVER);
-		this.url=dbResourseManager.getValue(DBParameter.DB_URL);
-		this.user=dbResourseManager.getValue(DBParameter.DB_USER);
-		this.password=dbResourseManager.getValue(DBParameter.DB_PASSWORD);
-	try{
-		this.poolSize=Integer.parseInt(dbResourseManager.getValue(DBParameter.DB_POLL_SIZE));
-		
-	}catch (NumberFormatException e){
-		poolSize=5;
-	}
-	}
-	private void initPoolData() throws ClassNotFoundException, SQLException {
-		Class.forName(driverName);
-		givenAwayConQueue=new ArrayBlockingQueue<Connection>(poolSize);
-		connectionQueue=new ArrayBlockingQueue<Connection>(poolSize);
-		for(int i=0;i<poolSize;i++) {
-			Connection connection = DriverManager.getConnection(url, user, password);
-			PooledConnection pooledConnection = new PooledConnection(connection);
-			connectionQueue.add(pooledConnection);
-		}
-		
-	}
+            for (int i = 0; i < poolSize; i++) {
+
+                Connection connection = DriverManager.getConnection(url, user, password);
+
+                PooledConnection pooledConnection = new PooledConnection(connection);
+
+                connectionQueue.add(pooledConnection);
+            }
+        }catch (SQLException e){
+            throw new ConnectionPoolException("SQLexception in ConnectionPool",e);
+        } catch (ClassNotFoundException e){
+            throw new ConnectionPoolException("Cant find database driver class",e);
+
+        }
+    }
+
 	public void dispose(){
 		clearConnectionQueue();
 	}
@@ -107,7 +92,7 @@ public final class ConnectionPool {
 			closeConnectionQueue(givenAwayConQueue);
 			closeConnectionQueue(connectionQueue);
 		}catch (SQLException e){
-			// logger.log(Level.ERROR,"Error closing the connection.",e);
+            LOGGER.log(Level.SEVERE,"Error closing the connection.",e);
 		}
 	}
 	public Connection takeConnection() throws ConnectionPoolException{
@@ -149,6 +134,24 @@ public final class ConnectionPool {
 			((java.sql.Statement) st).close();
 		}catch(SQLException e){
 			e.getStackTrace();
+		}
+	}
+	public void closeConnection (Connection con, PreparedStatement ps, ResultSet rs){
+		try{
+			con.close();
+		}
+		catch(SQLException e){
+			e.getMessage();
+		}
+		try{
+			((java.sql.PreparedStatement)ps).close();
+		}catch(SQLException e){
+			e.getStackTrace();
+		}
+		try {
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	private void closeConnectionQueue(BlockingQueue<Connection> queue) throws SQLException{

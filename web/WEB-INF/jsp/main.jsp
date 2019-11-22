@@ -1,4 +1,5 @@
-<%@ page import="by.htp.ts.been.User" %><%--
+<%@ page import="by.htp.ts.bean.User" %>
+<%@ page import="com.mysql.jdbc.StringUtils" %><%--
   Created by IntelliJ IDEA.
   User: Nina
   Date: 12.11.2019
@@ -15,10 +16,11 @@
 <%
 
     User user = (User)request.getAttribute("user");
-    String message = (String) request.getAttribute("message");
+
+    String message = (String) request.getAttribute("errMessage");
     if (message != null)
     {
-        out.println(request.getAttribute("message"));
+        out.println(request.getAttribute("errMessage"));
         return;
     }
     else {

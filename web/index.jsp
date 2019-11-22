@@ -16,7 +16,7 @@
   </form>
   <h3>
     <%
-      request.getAttribute("message");
+      request.getAttribute("errMessage");
     %>
   </h3>
   </body>
