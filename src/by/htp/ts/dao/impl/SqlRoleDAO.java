@@ -1,6 +1,5 @@
 package by.htp.ts.dao.impl;
 
-import by.htp.ts._java._se_07_connectionpool.connectionpool.ConnectionPoolException;
 import by.htp.ts.bean.UserRole;
 import by.htp.ts.command.impl.RequestParameter;
 import by.htp.ts.controller.Controller;

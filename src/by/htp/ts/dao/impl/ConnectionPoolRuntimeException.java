@@ -1,4 +1,4 @@
-package by.htp.ts._java._se_07_connectionpool.connectionpool;
+package by.htp.ts.dao.impl;
 
 public class ConnectionPoolRuntimeException extends Exception {
     private static final long serialVersionUID = 1L;

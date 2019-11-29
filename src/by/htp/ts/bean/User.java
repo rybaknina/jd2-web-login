@@ -1,6 +1,7 @@
 package by.htp.ts.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 public class User implements Serializable {
@@ -10,6 +11,9 @@ public class User implements Serializable {
     private int id;
     private String email;
     private String password;
+    private String name;
+    private String lastname;
+    private java.sql.Date birthday;
     private int role_id;
 
     public User() {
@@ -23,6 +27,15 @@ public class User implements Serializable {
     public User(String email, String password, int role_id) {
         this.email = email;
         this.password = password;
+        this.role_id = role_id;
+    }
+
+    public User(String email, String password, String name, String lastname, java.sql.Date birthday, int role_id) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.lastname = lastname;
+        this.birthday = birthday;
         this.role_id = role_id;
     }
 
@@ -52,6 +65,30 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public java.sql.Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(java.sql.Date birthday) {
+        this.birthday = birthday;
     }
 
     @Override

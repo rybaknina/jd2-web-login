@@ -1,7 +1,4 @@
-package by.htp.ts._java._se_07_connectionpool.connectionpool;
-
-import by.htp.ts._java._se_07_connectionpool.connectionpool.dbparameters.DBParameter;
-import by.htp.ts._java._se_07_connectionpool.connectionpool.dbparameters.DBResourceManager;
+package by.htp.ts.dao.impl;
 
 import java.sql.Statement;
 import java.sql.Array;
@@ -136,7 +133,7 @@ public final class ConnectionPool {
 			e.getStackTrace();
 		}
 	}
-	public void closeConnection (Connection con, PreparedStatement ps, ResultSet rs){
+	public void closeConnection (Connection con, PreparedStatement ps){
 		try{
 			con.close();
 		}
@@ -144,10 +141,13 @@ public final class ConnectionPool {
 			e.getMessage();
 		}
 		try{
-			((java.sql.PreparedStatement)ps).close();
+			((java.sql.PreparedStatement) ps).close();
 		}catch(SQLException e){
 			e.getStackTrace();
 		}
+	}
+	public void closeConnection (Connection con, PreparedStatement ps, ResultSet rs){
+		closeConnection(con,ps);
 		try {
 			rs.close();
 		} catch (SQLException e) {
