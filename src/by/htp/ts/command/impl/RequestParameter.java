@@ -11,5 +11,5 @@ public final class RequestParameter {
     public static final String BIRTHDAY = "birthday";
     public static final String ROLE = "role_id";
     public static final String MAIN_VIEW = "WEB-INF/jsp/main.jsp";
-    public static final String REGISTRATION_VIEW = "WEB-INF/jsp/registration.jsp";
+    public static final String REGISTRATION_VIEW = "WEB-INF/register.jsp";
 }

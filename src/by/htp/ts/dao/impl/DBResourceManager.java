@@ -1,4 +1,4 @@
-package by.htp.ts._java._se_07_connectionpool.connectionpool.dbparameters;
+package by.htp.ts.dao.impl;
 
 import java.util.ResourceBundle;
 

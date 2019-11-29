@@ -1,7 +1,7 @@
 package by.htp.ts.controller;
 
-import by.htp.ts._java._se_07_connectionpool.connectionpool.ConnectionPool;
-import by.htp.ts._java._se_07_connectionpool.connectionpool.ConnectionPoolException;
+import by.htp.ts.dao.impl.ConnectionPool;
+import by.htp.ts.dao.impl.ConnectionPoolException;
 import by.htp.ts.command.Command;
 import by.htp.ts.command.CommandProvider;
 import by.htp.ts.dao.DAOException;
